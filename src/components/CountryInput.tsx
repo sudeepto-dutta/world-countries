@@ -4,7 +4,6 @@ import {
   InputGroup,
   InputLeftElement,
   useColorMode,
-  //   VStack,
 } from "@chakra-ui/react";
 import colors from "../styles/colors";
 
@@ -27,8 +26,6 @@ const CountryInput = (): JSX.Element => {
           ? colors.darkModeElements[800]
           : colors.lightModeElements
       }
-      //   pl={{ sm: 5, md: 5 }}
-      //   pr={{ sm: 5, md: 0 }}
     >
       <InputLeftElement
         pointerEvents="none"

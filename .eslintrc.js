@@ -17,6 +17,7 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
+    "prettier/prettier": 0,
     "max-len": [1, 80, 4],
     semi: [2, "always"],
     "consistent-return": [
