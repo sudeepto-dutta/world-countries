@@ -72,7 +72,7 @@ const CountryList = (props: FlexboxProps): JSX.Element => {
               // px="4"
               // py="5"
               // height="10vh"
-              borderRadius={10}
+              borderEndRadius="md"
               backgroundColor={colorMode === "dark"
                 ? colors.darkModeElements[800]
                 : colors.lightModeElements}
@@ -82,9 +82,10 @@ const CountryList = (props: FlexboxProps): JSX.Element => {
               mt={5}
               {...props}
             >
-              <AspectRatio width="100%" ratio={16/9} mb={10} borderRadius={8}>
+              <AspectRatio width="100%" ratio={16/9} mb={10}>
                 <Image
                   fit="contain"
+                  borderTopRadius="md"
                   // height="300px"
                   // width="100%"
                   src={country.flag}
