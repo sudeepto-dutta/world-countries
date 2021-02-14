@@ -1,52 +1,85 @@
 import {
-  Icon,
+  Button,
+  Flex,
   Input,
   InputGroup,
-  InputLeftElement,
+  InputRightElement,
   useColorMode,
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import { memo, useContext, useState } from "react";
 import { CountryContext } from "../contexts/CountriesContext";
 import colors from "../styles/colors";
 
 const CountryInput = (): JSX.Element => {
   const { colorMode } = useColorMode();
   const countriesContext = useContext(CountryContext);
+  const [searchInput, setSearchInput] = useState('');
   return (
-    <InputGroup
-      my={5}
-      width={{ md: "30vw" }}
-      mx={5}
-      shadow="md"
-      rounded="md"
-      borderColor={
-        colorMode === "dark"
-          ? colors.darkModeElements[800]
-          : colors.lightModeElements
-      }
-      backgroundColor={
-        colorMode === "dark"
-          ? colors.darkModeElements[800]
-          : colors.lightModeElements
-      }
-    >
-      <InputLeftElement
-        pointerEvents="none"
-        left="none"
-        mt={1}
-        children={
-          <Icon viewBox="0 0 129 129" boxSize="5">
-            <path
-              fill="lightgray"
-              // eslint-disable-next-line max-len
-              d="M51.6,96.7c11,0,21-3.9,28.8-10.5l35,35c0.8,0.8,1.8,1.2,2.9,1.2s2.1-0.4,2.9-1.2c1.6-1.6,1.6-4.2,0-5.8l-35-35  c6.5-7.8,10.5-17.9,10.5-28.8c0-24.9-20.2-45.1-45.1-45.1C26.8,6.5,6.5,26.8,6.5,51.6C6.5,76.5,26.8,96.7,51.6,96.7z M51.6,14.7   c20.4,0,36.9,16.6,36.9,36.9C88.5,72,72,88.5,51.6,88.5c-20.4,0-36.9-16.6-36.9-36.9C14.7,31.3,31.3,14.7,51.6,14.7z"
-            />
-          </Icon>
+    <Flex alignItems="center">
+      <InputGroup
+        mt={8}
+        mb={5}
+        width={{ md: "30vw" }}
+        mx={5}
+        boxShadow="md"
+        rounded="md"
+        borderColor={
+          colorMode === "dark"
+            ? colors.darkModeElements[800]
+            : colors.lightModeElements
         }
-      />
-      <Input placeholder="Search Country" onChange={countriesContext?.handleSearchChange} size="lg" />
-    </InputGroup>
+        backgroundColor={
+          colorMode === "dark"
+            ? colors.darkModeElements[800]
+            : colors.lightModeElements
+        }
+      >
+        <Input
+          disabled={countriesContext?.loading}
+          placeholder="Search Country"
+          value={searchInput}
+          onChange={(event) => setSearchInput(event.target.value)}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              countriesContext?.handleSubmit(searchInput);
+            }
+          }}
+          size="lg"
+        />
+        <InputRightElement
+          hidden={Boolean(!searchInput)}
+          left="none"
+          mx={5}
+          mt={1}
+          width="4.5rem"
+        >
+          <Button
+            variant="unstyled"
+            color={colorMode === "dark"
+              ? colors.darkModeElements[600]
+              : colors.lightModeInput}
+            onClick={(_) => countriesContext?.handleSubmit(searchInput)}>
+                SEARCH
+          </Button>
+        </InputRightElement>
+      </InputGroup>
+      <Flex mt={8} mb={5}>
+        <Button
+          variant="ghost"
+          colorScheme="cyan"
+          disabled={countriesContext?.loading}
+          color={colorMode === "dark"
+            ? colors.darkModeText
+            : colors.lightModeInput}
+          onClick={() => {
+            countriesContext?.handleResetSearch();
+            setSearchInput('');
+          }}>
+                RESET
+        </Button>
+      </Flex>
+    </Flex>
   );
 };
 
-export default CountryInput;
+export default memo(CountryInput);

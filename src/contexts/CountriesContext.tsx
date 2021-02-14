@@ -1,8 +1,7 @@
 import {
-  ChangeEvent,
   createContext,
-  FormEvent,
   ReactNode,
+  useCallback,
   useEffect,
   useState
 } from 'react';
@@ -15,8 +14,8 @@ import { API_URL } from '../utils/constants';
 const CountryContext = createContext<ICountriesContext | null>(null);
 
 const CountryProvider = ({ children }: {children: ReactNode}): JSX.Element => {
-  const [showHomeButton, setShowHomeButton] = useState(false);
-  const [countries, setCountries] = useState([]);
+  const [countries, setCountries] = useState<ICountry[]>([]);
+  const [prevCountries, setPrevCountries] = useState<ICountry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
@@ -29,8 +28,8 @@ const CountryProvider = ({ children }: {children: ReactNode}): JSX.Element => {
         const { name, population, region, capital, flag } = country;
         return { name, population, region, capital, flag };
       });
-      console.log('countryListData ', countryListData);
       setCountries(countryListData);
+      setPrevCountries(countryListData);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -44,33 +43,42 @@ const CountryProvider = ({ children }: {children: ReactNode}): JSX.Element => {
     fetchCountries(`${API_URL}/all`);
   }, []);
 
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    try {
-      setLoading(true);
-      const searchURL = `${API_URL}/name/${search}`;
-      await fetchCountries(searchURL);
-      setLoading(false);
-      setShowHomeButton(true);
-    } catch (error) {
-      if (error) {
-        setError(error ? error?.message : error);
-      }
+  useEffect(() => {
+    if (search.length === 0) {
+      setCountries(prevCountries);
+    }
+  }, [search, prevCountries]);
+
+  const handleSubmit = (searchInput: string) => {
+    setSearch(searchInput);
+    const countriesCopy = [...prevCountries];
+    if (searchInput.length > 0) {
+      const searchText = searchInput.toLowerCase();
+      const countriesPayload = countriesCopy
+        .filter((country) => country.name
+          .toLowerCase().includes(searchText)
+      || country.capital.toLowerCase().includes(searchText));
+      setCountries(countriesPayload);
+    } else {
+      setCountries(prevCountries);
     }
   };
 
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-  };
+  const handleResetSearch = useCallback(
+    () => {
+      setSearch('');
+      setCountries(prevCountries);
+    },
+    [prevCountries],
+  );
 
   return (
     <CountryContext.Provider value={{
       loading,
       error,
       search,
-      showHomeButton,
       countries,
-      handleSearchChange,
+      handleResetSearch,
       handleSubmit,
     }}>
       {children}

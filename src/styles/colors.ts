@@ -10,7 +10,7 @@ const colors = {
   lightModeText: "	#111517",
   lightModeElements: "#fff",
   lightModeInput: "	#858585",
-  lightModeBackground: "#fafafa",
+  lightModeBackground: "#bfbfbf",
 };
 
 export default colors;

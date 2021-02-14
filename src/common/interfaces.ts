@@ -1,5 +1,3 @@
-import { ChangeEvent, FormEvent } from "react";
-
 export interface ICountry {
     name: string;
     capital: string;
@@ -19,7 +17,6 @@ export interface ICountriesContext {
     error: string;
     countries: ICountry[];
     search: string;
-    showHomeButton: boolean;
-    handleSearchChange: (_: ChangeEvent<HTMLInputElement>) => void;
-    handleSubmit: (_: FormEvent) => void
+    handleResetSearch: () => void;
+    handleSubmit: (_: string) => void
 }

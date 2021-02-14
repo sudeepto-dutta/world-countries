@@ -1,20 +1,7 @@
 module.exports = {
   extends: [
     "react-app", // Create React App base settings
-    "eslint:recommended", // recommended ESLint rules
-    // recommended rules from @typescript-eslint/eslint-plugin
-    "plugin:@typescript-eslint/recommended",
-    /*
-     * Uses eslint-config-prettier to disable ESLint rules
-     * from @typescript-eslint/eslint-plugin that would conflict with Prettier.
-     */
-    "prettier/@typescript-eslint",
-    /*
-     *  Enables eslint-plugin-prettier and eslint-config-prettier. This will
-     *  display Prettier errors as ESLint errors. Make sure this is always the
-     *  last configuration in the extends array.
-     */
-    "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
   ],
   rules: {
     "@typescript-eslint/no-explicit-any": 0,
@@ -73,5 +60,7 @@ module.exports = {
     ],
     "no-await-in-loop": "off",
     "no-multiple-empty-lines": [1, { max: 1 }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
 };
