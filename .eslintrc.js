@@ -17,6 +17,7 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
+    "@typescript-eslint/no-explicit-any": 0,
     "prettier/prettier": 0,
     "max-len": [1, 80, 4],
     semi: [2, "always"],

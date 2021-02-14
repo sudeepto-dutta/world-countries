@@ -5,10 +5,13 @@ import {
   InputLeftElement,
   useColorMode,
 } from "@chakra-ui/react";
+import { useContext } from "react";
+import { CountryContext } from "../contexts/CountriesContext";
 import colors from "../styles/colors";
 
 const CountryInput = (): JSX.Element => {
   const { colorMode } = useColorMode();
+  const countriesContext = useContext(CountryContext);
   return (
     <InputGroup
       my={5}
@@ -41,7 +44,7 @@ const CountryInput = (): JSX.Element => {
           </Icon>
         }
       />
-      <Input placeholder="Search Country" size="lg" />
+      <Input placeholder="Search Country" onChange={countriesContext?.handleSearchChange} size="lg" />
     </InputGroup>
   );
 };

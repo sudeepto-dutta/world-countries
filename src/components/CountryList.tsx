@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, /* useEffect, */ /* useState */ } from "react";
 import {
   AspectRatio,
   Flex,
@@ -8,47 +8,46 @@ import {
   Skeleton,
   Text,
   useColorMode,
-  useToast,
+  // useToast,
   VStack,
 } from "@chakra-ui/react";
 import colors from "../styles/colors";
-import { API_URL } from "../utils/constants";
-
-interface ICountry {
-  name: string;
-  capital: string;
-  population: number;
-  region: string;
-  flag: string;
-}
+// import { API_URL } from "../utils/constants";
+// import { ICountry } from "../common/interfaces";
+import { CountryContext } from "../contexts/CountriesContext";
 
 const CountryList = (props: FlexboxProps): JSX.Element => {
   const { colorMode } = useColorMode();
-  const [countryData, setCountryData] = useState<ICountry[]>([]);
-  const toast = useToast();
+  // const [countryData, /* setCountryData */] = useState<ICountry[]>([]);
+  const countriesContext = useContext(CountryContext);
+  const numberFormat = Intl.NumberFormat();
+  // const { countries } = countriesContext;
+  console.log('countries', countriesContext?.countries);
+  console.log('search', countriesContext?.search);
+  // const toast = useToast();
 
-  useEffect(() => {
-    async function fetchCountries() {
-      try {
-        const data = await fetch(API_URL);
-        const countries = await data.json();
-        const countryListData = countries.map((country: ICountry) => {
-          const { name, population, region, capital, flag } = country;
-          return { name, population, region, capital, flag };
-        });
-        // console.log("countries ", countries);
-        // console.log("countryListData ", countryListData);
-        setCountryData(countryListData);
-      } catch (error) {
-        toast({
-          description: error,
-          status: "error",
-          duration: 3000,
-        });
-      }
-    }
-    fetchCountries();
-  }, [toast]);
+  // useEffect(() => {
+  //   async function fetchCountries() {
+  //     try {
+  //       const data = await fetch(API_URL);
+  //       const countries = await data.json();
+  //       const countryListData = countries.map((country: ICountry) => {
+  //         const { name, population, region, capital, flag } = country;
+  //         return { name, population, region, capital, flag };
+  //       });
+  //       // console.log("countries ", countries);
+  //       // console.log("countryListData ", countryListData);
+  //       setCountryData(countryListData);
+  //     } catch (error) {
+  //       toast({
+  //         description: error,
+  //         status: "error",
+  //         duration: 3000,
+  //       });
+  //     }
+  //   }
+  //   fetchCountries();
+  // }, [toast]);
   return (
     <SimpleGrid
       spacingX="40px"
@@ -60,12 +59,12 @@ const CountryList = (props: FlexboxProps): JSX.Element => {
       columns={{ sm: 1, md: 2, xl: 3, "2xl": 3 }}
       autoRows="auto"
     >
-      {countryData.map((country, index) => {
+      {countriesContext?.countries?.map((country, index) => {
         console.log('country ', country);
         return (
           <Skeleton
             key={index}
-            isLoaded={countryData.length > 0}
+            isLoaded={!countriesContext?.loading}
             colorScheme="blue"
           >
             <VStack
@@ -107,7 +106,7 @@ const CountryList = (props: FlexboxProps): JSX.Element => {
                 </Text>
                 <Flex>
                   <Text mr={3} fontWeight="semibold">Population: </Text>
-                  <Text>{country.population}</Text>
+                  <Text>{numberFormat.format(country.population)}</Text>
                 </Flex>
                 <Flex>
                   <Text mr={3} fontWeight="semibold">Region:</Text>
